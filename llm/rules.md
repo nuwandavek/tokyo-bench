@@ -20,19 +20,22 @@ Each player's turn follows these stages. Turns go in clockwise direction.
     - After each roll, the agent can choose to keep any dice and re-roll the rest. So between each roll, `keep_dice` method is called, which returns the mask of the dice to keep.
 3. Resolve Dice Phase: Once the dice are finalized, we resolve them as follows:
     - Resolve VPs: 
-        Numbers (1, 2, 3): If you have at least three of the same number, gain points equal to the number value of the dice + 1 extra VP for each new of the same number value.
+        Numbers (1, 2, 3): If you have at least three of the same number, gain points equal to dice name + 1 extra VP for each new same number dice after 3.
         Example1: dice = [1, 2, 3, Heal, Attack, 1], VP = 0, since there are no sets of 3
-        Example2: dice = [1, 2, 2, 2, Attack, Heal], VP = 2, since number 2 occurs thrice
-        Example3: dice = [3, 3, 3, 3, Heal, 1], VP = 4, since triple 3's make 3VP + 1 VP for the extra 3
-        Example4: dice = [Heal, 2, 2, 2, Attack, 2], VP = 3, since triple 2's make 2VP + 1 VP for the extra 2
+        Example2: dice = [1, 2, 2, 2, Attack, Heal], VP = 2, since triple number 2s is 2 VP
+        Example3: dice = [3, 3, 3, 3, Heal, 1], VP = 4, since triple 3s make 3VP + 1 VP for the extra 3
+        Example4: dice = [Heal, 1, 1, 1, Attack, 1], VP = 2, since triple 1s make 1VP + 1 VP for the extra 1
+        Example5: three 1s, 2 Heals, 1 Attack, VP = 1 (1 for triple 1s)
+        Example6: four 1s, 1 Heals, 1 Attack, VP = 2 (1 for triple 1s + 1 for the 4th 1)
 
         In code this is resolved as:
         ```python
-        for dieside in [DIESIDE.ONE, DIESIDE.TWO, DIESIDE.THREE]:
+        for dieside in [1, 2, 3]:
             cnt = sum([x == dieside for x in dice])
             if cnt >= 3:
-                self.update_player_state(self.current_player, delta_vp=int(dieside))
-                self.update_player_state(self.current_player, delta_vp=cnt-3)
+                delta_vp = dieside + (cnt - 3)
+            else:
+                delta_vp = 0
         ```
     - Resolve Attacks: Total damage is the number of Attacks in the final dice roll
         - If your monster is inside Tokyo, you damage all monsters outside Tokyo.

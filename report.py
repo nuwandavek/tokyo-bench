@@ -149,7 +149,7 @@ class GameLogger:
                 html_content += f"""
                 <div class="game-tab">
                     <div class="tab-header" onclick="toggleTab('game-{game_id}')">
-                        <h3>Game {game_id + 1}: Winner - {winner}, Turns - {turn_counts}, Players - {players_str}</h3>
+                        <h3>Game {game_id + 1}: Winner - {winner}, Turns - {turn_counts}</h3>
                     </div>
                     <div id="game-{game_id}" class="tab-content">
                         <p><strong>Players:</strong> {players_str}</p>
