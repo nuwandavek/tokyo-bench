@@ -4,3 +4,5 @@ __pycache__/
 cache/
 .venv
 .env
+reports/
+.DS_Store
