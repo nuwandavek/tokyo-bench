@@ -116,10 +116,10 @@ class Game:
         self.logger.log(f'{self.current_player} enters Tokyo ({self.current_player.state})', category='warning')
 
     def resolve_dice(self, dice):
+        self.logger.log(f'\nStep 2: Resolving dice: {[x.value for x in dice]}', category='error')
         self.resolve_victory_point_dice(dice)
         self.resolve_health_dice(dice)
         self.resolve_attack_dice(dice)
-        self.logger.log(f'\nStep 2: Resolving dice: {[x.value for x in dice]}', category='error')
         for player in self.players:
             self.logger.log(f'{player}: {player.state}', category='info')
 
@@ -157,6 +157,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     assert len(args.players) >= 2, 'At least 2 players are required to play the game.'
+    assert len(args.players) <= 6, 'At most 6 players are allowed to play the game.'
     if args.verbose:
         assert args.n_games == 1, 'Verbose mode is only supported for single game.'
 
