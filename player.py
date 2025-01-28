@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from pydantic import BaseModel, Field
 from constants import MAX_HEALTH, VICTORY_PTS_WIN, DIESIDE
 
@@ -38,7 +38,7 @@ class Player(ABC):
         self._state.in_tokyo = in_tokyo
     
     @abstractmethod
-    def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, PlayerState], reroll_n: int) -> List[bool]:
+    def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, Tuple[int, PlayerState]], roll_counter: int) -> List[bool]:
         """
         Returns a mask of which dice to keep and which to reroll.
         Length of the mask should be equal to the length of dice_results.
@@ -46,7 +46,7 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def yield_tokyo(self, other_player_states: Dict[str, PlayerState]) -> bool:
+    def yield_tokyo(self, other_player_states: Dict[str, Tuple[int, PlayerState]]) -> bool:
         """
         Returns whether the player should yield Tokyo.
         """
@@ -54,3 +54,10 @@ class Player(ABC):
 
     def __str__(self):
         return f'p{self.idx}_{self.name}'
+
+    def construct_gamestate(self, other_player_states: Dict[str, Tuple[int, PlayerState]]):
+        return {
+            'ego_agent': {'name': self.name, 'idx': self.idx, 'state': self.state.model_dump()},
+            'other_agents': [{'name': name, 'idx': idx, 'state': state} for name, (idx, state) in other_player_states.items()]
+            }
+    

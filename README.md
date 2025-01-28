@@ -39,6 +39,8 @@ python game.py --players {angry,human} --n_games 1 --verbose
 ```python
 - random
 - angry
+
+- human #(play interactively with n_games=1 and verbose)
 ```
 
 ---

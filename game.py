@@ -30,12 +30,6 @@ class Game:
     def other_players(self):
         return [player for i, player in enumerate(self.players) if i != self.current_player_idx]
     
-    # @property
-    # def state(self):
-    #     return {
-    #         'current_player_idx': self.current_player_idx,
-    #         'players_states': {player.name: player.state for player in self.players},
-    #     }
     
     def update_player_state(self, player, delta_vp=0, delta_health=0, in_tokyo=None):
         player.increment_victory_points(delta_vp)
@@ -74,7 +68,7 @@ class Game:
             print(f'roll 1: {[x.value for x in dice_results]}')
         
         for i in range(2):
-            keep_mask = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: player.state for player in self.other_players}, reroll_n=i)
+            keep_mask = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: (player.idx, player.state) for player in self.other_players}, roll_counter=i)
             dice_results = [dice_results[i] for i in range(DIE_COUNT) if keep_mask[i]] + self.roll_n_dice(DIE_COUNT - sum(keep_mask))
             if self.verbose:
                 print(f'keep {i+1}: {keep_mask}')
@@ -106,7 +100,7 @@ class Game:
             tokyo_player = next((p for p in self.other_players if p.state.in_tokyo), None)
             if tokyo_player is not None:
                 self.update_player_state(tokyo_player, delta_health=-attack)
-                if tokyo_player.yield_tokyo({player.name: player.state for player in self.players if player.name != tokyo_player.name}):
+                if tokyo_player.yield_tokyo({player.name: (player.idx, player.state) for player in self.players if (player.idx != tokyo_player.idx)}):
                     self.update_player_state(tokyo_player, in_tokyo=False)
 
     def enter_tokyo(self):
