@@ -1,3 +1,4 @@
 pydantic
 jupyterlab
 tqdm
+openai

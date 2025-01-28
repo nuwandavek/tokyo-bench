@@ -8,6 +8,8 @@ from agents import AVAILABLE_AGENTS
 from player import Player
 from tqdm import trange
 
+from dotenv import load_dotenv
+load_dotenv()
 
 class Game:
     def __init__(self, players=List[Player], start_idx=0, verbose=False):
