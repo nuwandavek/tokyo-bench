@@ -8,6 +8,7 @@ godzilla-v2 is a super simplified king of tokyo game (derived heavily from [godz
 
 I plan to add some version of power cards and energy later. But this simple game already offers nice dynamics, especially in a multi-player setting.
 
+![cover](cover2.png)
 
 ## Installation
 ```bash
