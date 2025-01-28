@@ -33,14 +33,23 @@ python game.py --players {random,angry} --n_games 10000
 # you can also play as a human against an agent! (the interface needs to be improved)
 python game.py --players {angry,human} --n_games 1 --verbose
 
+
+
+# before using an llm agent, you need to expose the API key in .env file at root directory
+python game.py --players {angry,openai} --n_games 1 --verbose
 ```
 
 ### Available agents
 ```python
+# simple agents
 - random
 - angry
 
-- human #(play interactively with n_games=1 and verbose)
+# interactivate agent
+- human #(play with n_games=1 and verbose)
+
+# llm agents
+- openai
 ```
 
 ---
