@@ -160,7 +160,7 @@ if __name__ == '__main__':
     parser.add_argument('--verbose', '-v', action='store_true', help='Print game logs.', default=False)
     args = parser.parse_args()
 
-    assert len(args.players) == 2, 'Only two players are supported for now.'
+    assert len(args.players) >= 2, 'At least 2 players are required to play the game.'
 
     winners = [None] * args.n_games
     turns = [0] * args.n_games
