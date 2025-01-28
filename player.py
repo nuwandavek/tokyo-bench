@@ -38,17 +38,17 @@ class Player(ABC):
         self._state.in_tokyo = in_tokyo
     
     @abstractmethod
-    def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, Tuple[int, PlayerState]], roll_counter: int) -> List[bool]:
+    def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, Tuple[int, PlayerState]], roll_counter: int) -> Tuple[List[bool], str]:
         """
-        Returns a mask of which dice to keep and which to reroll.
+        Returns a mask of which dice to keep and which to reroll, and reason
         Length of the mask should be equal to the length of dice_results.
         """
         pass
 
     @abstractmethod
-    def yield_tokyo(self, other_player_states: Dict[str, Tuple[int, PlayerState]]) -> bool:
+    def yield_tokyo(self, other_player_states: Dict[str, Tuple[int, PlayerState]]) -> Tuple[bool, str]:
         """
-        Returns whether the player should yield Tokyo.
+        Returns whether the player should yield Tokyo, and reason
         """
         pass
 

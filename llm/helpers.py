@@ -29,12 +29,16 @@ ACTIONS_DESCRIPTIONS = {
         "type": "function",
         "function": {
             "name": "keep_dice",
-            "description": "Given a mask of the dice results, the masked out dice are retained and the rest are rerolled.",
+            "description": "Given a mask of the dice results, and reason why, the masked out dice are retained and the rest are rerolled.",
             "strict": True,
             "parameters": {
                 "type": "object",
-                "required": ["keep_mask"],
+                "required": ["reason", "keep_mask"],
                 "properties": {
+                    "reason": {
+                        "type": "string",
+                        "description": "1 or 2 sentence reason for keeping the dice. Maybe comment on personal strategy or opponent strategy.",
+                    },
                     "keep_mask": {
                         "type": "array",
                         "items": {
@@ -55,8 +59,12 @@ ACTIONS_DESCRIPTIONS = {
             "strict": True,
             "parameters": {
                 "type": "object",
-                "required": ["yield_tokyo"],
+                "required": ["reason", "yield_tokyo"],
                 "properties": {
+                    "reason": {
+                        "type": "string",
+                        "description": "1 or 2 sentence reason for yielding Tokyo. Maybe comment on personal strategy or opponent strategy.",
+                    },
                     "yield_tokyo": {
                         "type": "boolean",
                         "description": "True means yielding Tokyo, False means staying in Tokyo.",

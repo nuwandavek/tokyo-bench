@@ -59,7 +59,7 @@ class Game:
     def start_turn(self):
         if self.current_player.state.in_tokyo:
             self.update_player_state(self.current_player, delta_vp=START_TOKYO_PTS)
-            self.logger.log(f'{self.current_player} starts turn in Tokyo ({self.current_player.state})', category='event')
+            self.logger.log(f'{self.current_player} starts turn in Tokyo ({self.current_player.state})', category='warning')
 
     def roll_n_dice(self, n):
         return [random.choice([DIESIDE.ATTACK, DIESIDE.HEAL, DIESIDE.ONE, DIESIDE.TWO, DIESIDE.THREE]) for _ in range(n)]
@@ -70,9 +70,9 @@ class Game:
         self.logger.log(f'roll 1: {[x.value for x in dice_results]}', category='warning')
         
         for i in range(2):
-            keep_mask = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: (player.idx, player.state) for player in self.other_players}, roll_counter=i)
+            keep_mask, keep_reason = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: (player.idx, player.state) for player in self.other_players}, roll_counter=i)
             dice_results = [dice_results[i] for i in range(DIE_COUNT) if keep_mask[i]] + self.roll_n_dice(DIE_COUNT - sum(keep_mask))
-            self.logger.log(f'keep {i+1}: {keep_mask}', category='success')
+            self.logger.log(f'keep {i+1}: {keep_mask} (reason: {keep_reason})', category='success')
             self.logger.log(f'roll {i+2}: {[x.value for x in dice_results]}', category='warning')
 
         return dice_results
@@ -101,7 +101,9 @@ class Game:
             tokyo_player = next((p for p in self.other_players if p.state.in_tokyo), None)
             if tokyo_player is not None:
                 self.update_player_state(tokyo_player, delta_health=-attack)
-                if tokyo_player.yield_tokyo({player.name: (player.idx, player.state) for player in self.players if (player.idx != tokyo_player.idx)}):
+                yield_decision, yield_reason = tokyo_player.yield_tokyo({player.name: (player.idx, player.state) for player in self.players if (player.idx != tokyo_player.idx)})
+                if yield_decision:
+                    self.logger.log(f'{tokyo_player} yields Tokyo (reason: {yield_reason})', category='success')
                     self.update_player_state(tokyo_player, in_tokyo=False)
 
     def enter_tokyo(self):
