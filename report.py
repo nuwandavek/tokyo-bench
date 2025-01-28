@@ -188,8 +188,7 @@ class GameLogger:
             </html>
             """
 
-            # report_name = "./reports/" + "_".join(self.player_names) + time.strftime("_%Y%m%d_%H%M%S") + ".html"
-            report_name = "./reports/" + "_".join(self.player_names) + ".html"
+            report_name = "./reports/" + "_".join(self.player_names) + time.strftime("_%Y%m%d_%H%M%S") + ".html"
             Path("reports").mkdir(parents=True, exist_ok=True)
             with open(report_name, 'w') as f:
                 f.write(html_content)
