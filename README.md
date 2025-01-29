@@ -2,11 +2,16 @@
 
 tokyo-bench is a super simplified [king of tokyo game](https://en.wikipedia.org/wiki/King_of_Tokyo) (derived heavily from [godzilla](https://github.com/haraschax/godzilla/) repo). The goal of this game is to create a benchmark for reasoning LLMs, and see how they fare against classic game playing techniques.
 
-#### Simplifications from King of Tokyo
-- There are no energy cubes
-- There are no power cards to buy
+### Available agents
 
-I plan to add some version of power cards and energy later. But this simple game already offers nice dynamics, especially in a multi-player setting.
+| Agents            | Company/Lab       | Strategy        | Tool Use | Reasoning Model |
+|-----------------|------------------|---------------|----------|----------------|
+| `random`        | -              | 🔵 Rule-Based  |        |               |
+| `angry`         | -              | 🔵 Rule-Based  |        |               |
+| `human`         | -              |  ⁉️  |        |               |
+| `openai_gpt4o`  | OpenAI           | 🟠 LLM        | ✅       | ❌              |
+| `openai_o1mini` | OpenAI           | 🟠 LLM        | ❌       | ✅              |
+| `anthropic_cs3pt5` | Anthropic      | 🟠 LLM        | ✅       | ❌              |
 
 ![cover](misc/cover2.png)
 
@@ -53,25 +58,17 @@ As of now you can generate a report, which gives a nice way to visualize the gam
 python game.py --players {angry,random,anthropic_cs3pt5} --n_games 1 --report
 ```
 
-### Available agents
-```python
-# simple agents
-- random
-- angry
-
-# interactivate agent
-- human #(play with n_games=1 and verbose)
-
-# llm agents
-## tool_use agents
-- openai_gpt4o
-- anthropic_cs3pt5
-```
-
----
-
 ## Creating a new agent
 
 - Create a file `agents/new_fancy_agent.py`
 - Implement the two methods of the `Player` class: `keep_dice` and `yield_tokyo`
 - Add the agent in `agent/__init__.py`
+
+
+---
+###  Simplifications from King of Tokyo
+- There are no energy cubes
+- There are no power cards to buy
+
+I plan to add some version of power cards and energy later. But this simple game already offers nice dynamics, especially in a multi-player setting.
+
