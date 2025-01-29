@@ -1,4 +1,4 @@
-# godzilla-v2
+# tokyo-bench
 A simplified variant of the King of Tokyo game
 
 ### Goal

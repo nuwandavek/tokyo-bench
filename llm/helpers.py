@@ -9,7 +9,7 @@ class ACTIONS(Enum):
 with open("./llm/rules.md", "r") as f:
     RULES = f.read()
 
-SYSTEM_PROMPT = f"""You are an expert player of the game godzilla-v2. Your goal is to play the best possible action given the circumstances, to eventually win the game.
+SYSTEM_PROMPT = f"""You are an expert player of the game tokyo-bench. Your goal is to play the best possible action given the circumstances, to eventually win the game.
 <GameRules>
 {RULES}
 </GameRules>

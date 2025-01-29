@@ -79,7 +79,7 @@ class GameLogger:
             <!DOCTYPE html>
             <html>
             <head>
-                <title>godzilla-v2 game report</title>
+                <title>tokyo-bench report</title>
                 <style>
                     body {{ font-family: sans-serif; }}
                     .summary {{ margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }}
@@ -109,7 +109,7 @@ class GameLogger:
                 </style>
             </head>
             <body>
-                <h1>godzilla-v2 game report</h1>
+                <h1>tokyo-bench game report</h1>
 
                 <div class="summary">
                     <h2>Game Summary</h2>

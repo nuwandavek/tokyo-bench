@@ -1,6 +1,6 @@
-# godzilla-v2
+# tokyo-bench
 
-godzilla-v2 is a super simplified king of tokyo game (derived heavily from [godzilla](https://github.com/haraschax/godzilla/)). The goal of this game is to create a benchmark for reasoning LLMs, and see how they fare against classic game playing techniques.
+tokyo-bench is a super simplified [king of tokyo game](https://en.wikipedia.org/wiki/King_of_Tokyo) (derived heavily from [godzilla](https://github.com/haraschax/godzilla/) repo). The goal of this game is to create a benchmark for reasoning LLMs, and see how they fare against classic game playing techniques.
 
 #### Simplifications from King of Tokyo
 - There are no energy cubes
