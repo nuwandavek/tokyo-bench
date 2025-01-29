@@ -1,7 +1,10 @@
+import json
 from abc import ABC, abstractmethod
 from typing import List, Dict, Tuple
 from pydantic import BaseModel, Field
 from constants import MAX_HEALTH, VICTORY_PTS_WIN, DIESIDE
+from llm.helpers import ACTIONS, get_llm_request_args
+from litellm import completion
 
 
 class PlayerState(BaseModel):
@@ -60,4 +63,20 @@ class Player(ABC):
             'ego_agent': {'name': self.name, 'idx': self.idx, 'state': self.state.model_dump()},
             'other_agents': [{'name': name, 'idx': idx, 'state': state} for name, (idx, state) in other_player_states.items()]
             }
+    
+    def llm_call(self, other_player_states: Dict[str, Tuple[int, PlayerState]], action: ACTIONS, dice_results: List[DIESIDE], roll_counter: int, model: str):
+        gamestate = self.construct_gamestate(other_player_states)
+        if action == ACTIONS.KEEP_DICE:
+            gamestate['dice_results'] = [x.value for x in dice_results]
+            gamestate['roll_counter'] = roll_counter + 1
+        
+        messages, tools, tool_choice = get_llm_request_args(action, gamestate)
+        response = completion(model=model, messages=messages, tools=tools, tool_choice=tool_choice)
+        llm_response = json.loads(response.choices[0].message.tool_calls[0].function.arguments)
+        if action == ACTIONS.KEEP_DICE:
+            assert len(llm_response["keep_mask"]) == len(dice_results), f"Expected mask of length {len(dice_results)}, got {len(llm_response["keep_mask"])}"
+            return llm_response["keep_mask"], llm_response["reason"]
+        elif action == ACTIONS.YIELD_TOKYO:
+            return llm_response["yield_tokyo"], llm_response["reason"]
+
     

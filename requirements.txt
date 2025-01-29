@@ -1,6 +1,4 @@
 pydantic
 jupyterlab
 tqdm
-openai
-anthropic
-google-genai
+litellm
