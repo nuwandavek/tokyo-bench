@@ -102,8 +102,8 @@ class Game:
             if tokyo_player is not None:
                 self.update_player_state(tokyo_player, delta_health=-attack)
                 yield_decision, yield_reason = tokyo_player.yield_tokyo({player.name: (player.idx, player.state) for player in self.players if (player.idx != tokyo_player.idx)})
+                self.logger.log(f"{tokyo_player}'s yield decision: {yield_decision} (reason: {yield_reason})", category='success')
                 if yield_decision:
-                    self.logger.log(f'{tokyo_player} yields Tokyo (reason: {yield_reason})', category='success')
                     self.update_player_state(tokyo_player, in_tokyo=False)
 
     def enter_tokyo(self):

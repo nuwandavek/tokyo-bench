@@ -24,6 +24,17 @@ Given the current state of the game, you are required to play your turn.
 Action: {ACTION}
 """
 
+TURN_PROMPT_NO_TOOL = """
+Given the current state of the game, you are required to play your turn.
+<GameState>
+{GAME_STATE}
+</GameState>
+
+Action: {ACTION}
+Action description and Output format: {OUTPUT_FORMAT}
+"""
+
+
 ACTIONS_DESCRIPTIONS = {
     ACTIONS.KEEP_DICE: {
         "type": "function",
@@ -77,15 +88,31 @@ ACTIONS_DESCRIPTIONS = {
     },
 }
 
+ACTIONS_OUTPUT_FORMAT = {
+    ACTIONS.KEEP_DICE: """You need to give a mask for which dice to keep, and which to reroll. Provide the reasoning for your choice in <reason></reason> tags. The reasoning should be 1 or 2 sentences for keeping the dice. Maybe comment on personal strategy or opponent strategy.
+The mask of which dice to keep should be provided in <move></move> tags. There are 6 dice in total. Example: <move>[true, false, true, false, true, false]</move>
+""",
+    ACTIONS.YIELD_TOKYO: """You need to either yield Tokyo or not. Provide the reasoning for your choice in <reason></reason> tags. The reasoning should be 1 or 2 sentences for yielding Tokyo. Maybe comment on personal strategy or opponent strategy.
+The choice of yielding Tokyo should be provided in <move></move> tags. Example: <move>true</move>
+    """
+}
 
-def get_llm_request_args(action: ACTIONS, game_state: dict):
+
+
+def get_llm_request_args(action: ACTIONS, game_state: dict, tool_use: bool = True):
+    if tool_use:
+        user_prompt_content = TURN_PROMPT.format(GAME_STATE=game_state, ACTION=action.value)
+        tools = [ACTIONS_DESCRIPTIONS[action]]
+        tool_choice = {"type": "function", "function": {"name": action.value}}
+    else:
+        user_prompt_content = TURN_PROMPT_NO_TOOL.format(GAME_STATE=game_state, ACTION=action.value, OUTPUT_FORMAT=ACTIONS_OUTPUT_FORMAT[action])
+        tools = None
+        tool_choice = None
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": TURN_PROMPT.format(GAME_STATE=game_state, ACTION=action.value)},
+        {"role": "user", "content": user_prompt_content},
     ]
 
-    tools = [ACTIONS_DESCRIPTIONS[action]]
-    tool_choice = {"type": "function", "function": {"name": action.value}}
     return messages, tools, tool_choice
-    
+
 

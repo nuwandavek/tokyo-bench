@@ -1,4 +1,5 @@
 import json
+import re
 from abc import ABC, abstractmethod
 from typing import List, Dict, Tuple
 from pydantic import BaseModel, Field
@@ -79,6 +80,16 @@ class Player(ABC):
                 return llm_response["keep_mask"], llm_response["reason"]
             elif action == ACTIONS.YIELD_TOKYO:
                 return llm_response["yield_tokyo"], llm_response["reason"]
+        else:
+            try:
+                llm_response = response.choices[0].message.content
+                move = json.loads(re.findall(r'<move>(.*?)</move>', llm_response)[0])
+                reason = ''.join(re.findall(r'<reason>(.*?)</reason>', llm_response))
+            except Exception as e:
+                print(f"Error parsing LLM response: {e}")
+                print(llm_response)
+                return None, None
+            return move, reason
 
 
     
