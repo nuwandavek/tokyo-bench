@@ -19,11 +19,11 @@ uv pip install -r requirements.txt
 
 ## Running the game
 ```
-usage: game.py [-h] --players {random,angry,human,openai,anthropic} [{random,angry,human,openai,anthropic} ...] [--n_games N_GAMES] [--verbose] [--report]
+usage: game.py [-h] --players {random,angry,human,openai_gpt4o,anthropic_cs3pt5} [{random,angry,human,openai_gpt4o,anthropic_cs3pt5} ...] [--n_games N_GAMES] [--verbose] [--report]
 
 options:
   -h, --help            show this help message and exit
-  --players {random,angry,human,openai,anthropic} [{random,angry,human,openai,anthropic} ...], -p {random,angry,human,openai,anthropic} [{random,angry,human,openai,anthropic} ...]
+  --players {random,angry,human,openai_gpt4o,anthropic_cs3pt5} [{random,angry,human,openai_gpt4o,anthropic_cs3pt5} ...], -p {random,angry,human,openai_gpt4o,anthropic_cs3pt5} [{random,angry,human,openai_gpt4o,anthropic_cs3pt5} ...]
                         List of players (agent names) to participate in the game.
   --n_games N_GAMES, -n N_GAMES
   --verbose, -v         Print game logs.
@@ -44,13 +44,13 @@ python game.py --players {angry,human} --n_games 1 --verbose
 #### 3. Play an LLM against other agents
 ```bash
 # before using an llm agent, you need to expose the API key in .env file at root directory
-python game.py --players {angry,random,openai} --n_games 1 --verbose
+python game.py --players {angry,random,openai_gpt4o} --n_games 1 --verbose
 ```
 
 ### Visualize games
 As of now you can generate a report, which gives a nice way to visualize the games + see the LLM reasoning!
 ```bash
-python game.py --players {angry,random,anthropic} --n_games 1 --report
+python game.py --players {angry,random,anthropic_cs3pt5} --n_games 1 --report
 ```
 
 ### Available agents
@@ -63,8 +63,9 @@ python game.py --players {angry,random,anthropic} --n_games 1 --report
 - human #(play with n_games=1 and verbose)
 
 # llm agents
-- openai
-- anthropic
+## tool_use agents
+- openai_gpt4o
+- anthropic_cs3pt5
 ```
 
 ---
