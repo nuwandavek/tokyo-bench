@@ -8,7 +8,7 @@ tokyo-bench is a super simplified [king of tokyo game](https://en.wikipedia.org/
 
 I plan to add some version of power cards and energy later. But this simple game already offers nice dynamics, especially in a multi-player setting.
 
-![cover](cover2.png)
+![cover](misc/cover2.png)
 
 ## Installation
 ```bash
