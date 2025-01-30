@@ -5,6 +5,7 @@ from llm.helpers import ACTIONS
 
 MODEL = 'claude-3-5-sonnet-20241022'
 
+
 class CS3PT5Agent(Player):
     def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, Tuple[int, PlayerState]], roll_counter: int) -> Tuple[List[bool], str]:
         return self.llm_call(other_player_states, ACTIONS.KEEP_DICE, dice_results, roll_counter, MODEL, tool_use=True)

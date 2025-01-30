@@ -1,10 +1,11 @@
 # The goal is to give the same prompts to all the LLMs
 from enum import Enum
-import json
+
 
 class ACTIONS(Enum):
     KEEP_DICE = "keep_dice"
     YIELD_TOKYO = "yield_tokyo"
+
 
 with open("./llm/rules.md", "r") as f:
     RULES = f.read()
@@ -98,7 +99,6 @@ The choice of yielding Tokyo should be provided in <move></move> tags. Example: 
 }
 
 
-
 def get_llm_request_args(action: ACTIONS, game_state: dict, tool_use: bool = True):
     if tool_use:
         user_prompt_content = TURN_PROMPT.format(GAME_STATE=game_state, ACTION=action.value)
@@ -114,5 +114,3 @@ def get_llm_request_args(action: ACTIONS, game_state: dict, tool_use: bool = Tru
     ]
 
     return messages, tools, tool_choice
-
-

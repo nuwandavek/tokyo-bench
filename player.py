@@ -23,33 +23,33 @@ class Player(ABC):
         self.min_health = 0
         self.min_victory_points = 0
         self.reset()
-    
+
     @property
     def name(self):
         return self._name
-    
+
     @property
     def state(self):
         return self._state.model_copy(deep=True)
-    
+
     def increment_health(self, n: int):
         self._state.health = max(self.min_health, min(self.max_health, self._state.health + n))
-    
+
     def increment_victory_points(self, n: int):
         self._state.victory_points = max(self.min_victory_points, min(self.max_victory_points, self._state.victory_points + n))
-    
+
     def set_tokyo(self, in_tokyo: bool):
         self._state.in_tokyo = in_tokyo
 
     def reset(self):
         self._state = PlayerState()
-    
+
     def set_health(self, n: int):
         self._state.health = max(self.min_health, min(self.max_health, n))
-    
+
     def set_victory_points(self, n: int):
         self._state.victory_points = max(self.min_victory_points, min(self.max_victory_points, n))
-    
+
     @abstractmethod
     def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, Tuple[int, PlayerState]], roll_counter: int) -> Tuple[List[bool], str]:
         """
@@ -72,8 +72,8 @@ class Player(ABC):
         return {
             'ego_agent': {'name': self.name, 'idx': self.idx, 'state': self.state.model_dump()},
             'other_agents': [{'name': name, 'idx': idx, 'state': state} for name, (idx, state) in other_player_states.items()]
-            }
-    
+        }
+
     def llm_call(self, other_player_states: Dict[str, Tuple[int, PlayerState]], action: ACTIONS, dice_results: List[DIESIDE], roll_counter: int, model: str, tool_use: bool = True):
         gamestate = self.construct_gamestate(other_player_states)
         if action == ACTIONS.KEEP_DICE:
@@ -99,6 +99,3 @@ class Player(ABC):
                 print(llm_response)
                 return None, None
             return move, reason
-
-
-    

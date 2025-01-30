@@ -5,6 +5,7 @@ from llm.helpers import ACTIONS
 
 MODEL = 'gpt-4o'
 
+
 class GPT4OAgent(Player):
     def keep_dice(self, dice_results: List[DIESIDE], other_player_states: Dict[str, Tuple[int, PlayerState]], roll_counter: int) -> Tuple[List[bool], str]:
         return self.llm_call(other_player_states, ACTIONS.KEEP_DICE, dice_results, roll_counter, MODEL, tool_use=True)

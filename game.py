@@ -2,14 +2,14 @@ import argparse
 import random
 import copy
 from typing import List
-from constants import DIESIDE, MAX_HEALTH, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS
-from agents import AVAILABLE_AGENTS
-from player import Player
 from tqdm import trange
 
+from constants import DIESIDE, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS
+from agents import AVAILABLE_AGENTS
+from player import Player
 from report import GameLogger
-
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -33,28 +33,24 @@ class Game:
     @property
     def other_players(self):
         return [player for i, player in enumerate(self.players) if i != self.current_player_idx]
-    
-    
+
     def update_player_state(self, player, delta_vp=0, delta_health=0, in_tokyo=None):
         player.increment_victory_points(delta_vp)
         player.increment_health(delta_health)
         if in_tokyo is not None:
             player.set_tokyo(in_tokyo)
-        
+
         if self.is_player_winner(player):
             self.winner_idx = player.idx
-        
+
         if self.is_player_dead(player):
             self.active_players[player.idx] = False
 
-        
-
     def is_player_dead(self, player):
         return player.state.health == 0
-    
+
     def is_player_winner(self, player):
         return player.state.victory_points == VICTORY_PTS_WIN
-
 
     def start_turn(self):
         if self.current_player.state.in_tokyo:
@@ -66,28 +62,28 @@ class Game:
 
     def roll_dice(self):
         dice_results = self.roll_n_dice(DIE_COUNT)
-        self.logger.log(f'\nStep 1: Rolling dice...', category='error')
+        self.logger.log('\nStep 1: Rolling dice...', category='error')
         self.logger.log(f'roll 1: {[x.value for x in dice_results]}', category='warning')
-        
+
         for i in range(2):
             keep_mask, keep_reason = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: (player.idx, player.state) for player in self.other_players}, roll_counter=i)
             dice_results = [dice_results[i] for i in range(DIE_COUNT) if keep_mask[i]] + self.roll_n_dice(DIE_COUNT - sum(keep_mask))
-            self.logger.log(f'keep {i+1}: {keep_mask} (reason: {keep_reason})', category='success')
-            self.logger.log(f'roll {i+2}: {[x.value for x in dice_results]}', category='warning')
+            self.logger.log(f'keep {i + 1}: {keep_mask} (reason: {keep_reason})', category='success')
+            self.logger.log(f'roll {i + 2}: {[x.value for x in dice_results]}', category='warning')
 
         return dice_results
 
     def resolve_victory_point_dice(self, dice):
         for dieside in [DIESIDE.ONE, DIESIDE.TWO, DIESIDE.THREE]:
-          cnt = sum([x == dieside for x in dice])
-          if cnt >= 3:
-            self.update_player_state(self.current_player, delta_vp=int(dieside))
-            self.update_player_state(self.current_player, delta_vp=cnt-3)
-    
+            cnt = sum([x == dieside for x in dice])
+            if cnt >= 3:
+                self.update_player_state(self.current_player, delta_vp=int(dieside))
+                self.update_player_state(self.current_player, delta_vp=cnt - 3)
+
     def resolve_health_dice(self, dice):
         heals = sum([x == DIESIDE.HEAL for x in dice])
         if not self.current_player.state.in_tokyo:
-          self.update_player_state(self.current_player, delta_health=heals)
+            self.update_player_state(self.current_player, delta_health=heals)
 
     def resolve_attack_dice(self, dice):
         attack = sum([x == DIESIDE.ATTACK for x in dice])
@@ -107,9 +103,9 @@ class Game:
                     self.update_player_state(tokyo_player, in_tokyo=False)
 
     def enter_tokyo(self):
-        self.logger.log(f'\nStep 3: Resolving Tokyo', category='error')
+        self.logger.log('\nStep 3: Resolving Tokyo', category='error')
         if any([player.state.in_tokyo for player in self.players]):
-            self.logger.log(f'No change', category='warning')
+            self.logger.log('No change', category='warning')
             return
         self.update_player_state(self.current_player, delta_vp=ENTER_TOKYO_PTS)
         self.update_player_state(self.current_player, in_tokyo=True)
@@ -147,7 +143,6 @@ class Game:
         self.current_player_idx = (self.current_player_idx + 1) % self.n_players
 
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--players', '-p', nargs='+', choices=AVAILABLE_AGENTS.keys(), required=True, help='List of players (agent names) to participate in the game.')
@@ -164,7 +159,7 @@ if __name__ == '__main__':
     logger = GameLogger(player_names=[f"p{p}_{player}" for p, player in enumerate(args.players)], total_games=args.n_games, verbose=args.verbose, report=args.report)
     for i in trange(args.n_games):
         players = [AVAILABLE_AGENTS[player](idx=p, name=player) for p, player in enumerate(args.players)]
-        game = Game(players=players, start_idx=i%len(args.players), logger=logger)
+        game = Game(players=players, start_idx=i % len(args.players), logger=logger)
         logger.start_game(game_id=i)
         while game.winner_idx == -1:
             game.step()

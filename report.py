@@ -23,6 +23,7 @@ CATEGORY_COLORS = {
     'info': 'CYAN'
 }
 
+
 class GameLogger:
     def __init__(self, player_names, total_games, verbose=False, report=False):
         self.player_names = player_names
@@ -42,13 +43,13 @@ class GameLogger:
                 self.current_game_log['turns'] = [{'turn_num': 0, 'events': []}]
             current_turn_events = self.current_game_log['turns'][-1]['events']
             current_turn_events.append({'message': message, 'category': category})
-    
+
     def start_game(self, game_id):
         if self.report:
             self.current_game_log = {'game_id': game_id, 'players': self.player_names, 'turns': [], 'winner': None}
         if self.verbose:
             self.log(f"\nStarting Game {game_id} with players: {', '.join(self.player_names)}", category='event')
-    
+
     def end_game(self, winner_name, turn_counts):
         if self.report:
             self.current_game_log['winner'] = winner_name
@@ -61,8 +62,8 @@ class GameLogger:
 
     def generate_report(self):
         summary_stats = {}
-        summary_stats['winners_count'] = [f'{player}: {count} ({count/self.total_games:.2%})' for player, count in Counter(self.winners).items()]
-        summary_stats['avg_turns_per_player_per_game'] = f"{sum(self.turn_counts)/self.total_games/len(self.player_names):.2f}"
+        summary_stats['winners_count'] = [f'{player}: {count} ({count / self.total_games:.2%})' for player, count in Counter(self.winners).items()]
+        summary_stats['avg_turns_per_player_per_game'] = f"{sum(self.turn_counts) / self.total_games / len(self.player_names):.2f}"
 
         self.log("\n\n\nGame Stats", category='info', force_print=True)
         self.log("------------", category='info', force_print=True)
@@ -74,7 +75,6 @@ class GameLogger:
         self.log(f"Total turns per player per game: {summary_stats['avg_turns_per_player_per_game']}", category='warning', force_print=True)
 
         if self.report:
-
             html_content = f"""
             <!DOCTYPE html>
             <html>
@@ -105,7 +105,7 @@ class GameLogger:
                     .log-level-error {{ color: red; margin-top: 25px; }}
                     .log-level-warning {{ color: orange; }}
                     .log-level-info {{ color: blue; }}
-                    
+
                 </style>
             </head>
             <body>
@@ -158,7 +158,7 @@ class GameLogger:
                 """
                 for turn_data in game_log['turns']:
                     turn_num = turn_data['turn_num']
-                    if turn_num > 0: # Skip turn 0 logs
+                    if turn_num > 0:  # Skip turn 0 logs
                         html_content += f"<h4>Turn {turn_num}</h4>"
                     for event in turn_data['events']:
                         level = event['category']
