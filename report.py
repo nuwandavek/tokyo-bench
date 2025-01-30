@@ -56,7 +56,10 @@ class GameLogger:
             self.current_game_log['turn_counts'] = turn_counts
             self.game_logs.append(self.current_game_log)
         if self.verbose:
-            self.log(f"Game ended. Winner: {winner_name} in {turn_counts} turns.", category='info')
+            self.log("\n\n----- Game ended -----", category='warning')
+            self.log(f"Total turns: {turn_counts}", category='info')
+            self.log(f"Winner: {winner_name}\n\n", category='success')
+
         self.winners.append(winner_name)
         self.turn_counts.append(turn_counts)
 

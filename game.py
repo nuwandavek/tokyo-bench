@@ -164,4 +164,7 @@ if __name__ == '__main__':
         while game.winner_idx == -1:
             game.step()
         logger.end_game(winner_name=str(game.players[game.winner_idx]), turn_counts=game.turns)
+        for player in game.players:
+            logger.log(f'{player}: {player.state}', category='error' if game.is_player_dead(player) else 'success')
+        logger.log('\n\n\n', category='info')
     logger.generate_report()

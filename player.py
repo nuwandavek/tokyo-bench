@@ -79,7 +79,7 @@ class Player(ABC):
         if action == ACTIONS.KEEP_DICE:
             gamestate['dice_results'] = [x.value for x in dice_results]
             gamestate['roll_counter'] = roll_counter + 1
-        
+
         messages, tools, tool_choice = get_llm_request_args(action, gamestate, tool_use)
         response = completion(model=model, messages=messages, tools=tools, tool_choice=tool_choice)
         if tool_use:
