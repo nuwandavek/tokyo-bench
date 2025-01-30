@@ -15,6 +15,21 @@ tokyo-bench is a super simplified [king of tokyo game](https://en.wikipedia.org/
 
 ![cover](misc/cover2.png)
 
+## Some sample game traces
+- A sample game result
+![img1](misc/1.png)
+
+- claude-3.5-sonnet recognizing o1-mini being close to victory
+![img2](misc/2.png)
+
+- claude-3.5-sonnet reasoning about survival vs getting VPs
+![img3](misc/3.png)
+
+- o1-mini crushing it! 
+![img4](misc/4.png)
+
+
+
 ## Installation
 ```bash
 uv venv
