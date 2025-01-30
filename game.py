@@ -1,7 +1,6 @@
 import argparse
 import random
 import copy
-from collections import Counter
 from typing import List
 from constants import DIESIDE, MAX_HEALTH, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS
 from agents import AVAILABLE_AGENTS
@@ -12,6 +11,7 @@ from report import GameLogger
 
 from dotenv import load_dotenv
 load_dotenv()
+
 
 class Game:
     def __init__(self, players=List[Player], start_idx=0, logger=None):
