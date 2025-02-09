@@ -4,10 +4,10 @@ import copy
 from typing import List
 from tqdm import trange
 
-from constants import DIESIDE, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS
+from helpers.constants import DIESIDE, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS
 from agents import AVAILABLE_AGENTS
 from player import Player
-from report import GameLogger
+from helpers.report import GameLogger
 from dotenv import load_dotenv
 
 load_dotenv()

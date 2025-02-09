@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-from constants import DIESIDE
+from helpers.constants import DIESIDE
 from player import PlayerState, Player
 
 

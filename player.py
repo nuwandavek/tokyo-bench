@@ -3,7 +3,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import List, Dict, Tuple
 from pydantic import BaseModel, Field
-from constants import MAX_HEALTH, VICTORY_PTS_WIN, DIESIDE
+from helpers.constants import MAX_HEALTH, VICTORY_PTS_WIN, DIESIDE
 from llm.helpers import ACTIONS, get_llm_request_args
 from litellm import completion
 
