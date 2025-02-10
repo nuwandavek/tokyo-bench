@@ -13,7 +13,7 @@ tokyo-bench is a super simplified [king of tokyo game](https://en.wikipedia.org/
 | `openai_o1mini` | OpenAI           | 🟠 LLM        | ❌       | ✅              |
 | `openai_o3mini` | OpenAI           | 🟠 LLM        | ❌       | ✅              |
 | `anthropic_cs3pt5` | Anthropic      | 🟠 LLM        | ✅       | ❌              |
-| `cerebras_r1llama70b` | DeepSeek + Cerebras | 🟠 LLM       | ❌    | ✅           |
+<!-- | `cerebras_r1llama70b` | DeepSeek + Cerebras | 🟠 LLM       | ❌    | ✅           | -->
 
 ![cover](misc/cover2.png)
 
