@@ -4,7 +4,7 @@ import copy
 from typing import List
 from tqdm import trange
 
-from helpers.constants import DIESIDE, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS
+from helpers.constants import DIESIDE, VICTORY_PTS_WIN, DIE_COUNT, ENTER_TOKYO_PTS, START_TOKYO_PTS, MAX_ROLLS
 from agents import AVAILABLE_AGENTS
 from player import Player
 from helpers.report import GameLogger
@@ -57,19 +57,19 @@ class Game:
             self.update_player_state(self.current_player, delta_vp=START_TOKYO_PTS)
             self.logger.log(f'{self.current_player} starts turn in Tokyo ({self.current_player.state})', category='warning')
 
-    def roll_n_dice(self, n):
+    def roll_n_dice(self, n=DIE_COUNT):
         return [random.choice([DIESIDE.ATTACK, DIESIDE.HEAL, DIESIDE.ONE, DIESIDE.TWO, DIESIDE.THREE]) for _ in range(n)]
 
     def roll_dice(self):
-        dice_results = self.roll_n_dice(DIE_COUNT)
+        dice_results, keep_mask = [], []
         self.logger.log('\nStep 1: Rolling dice...', category='error')
-        self.logger.log(f'roll 1: {[x.value for x in dice_results]}', category='warning')
 
-        for i in range(2):
-            keep_mask, keep_reason = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: (player.idx, player.state) for player in self.other_players}, roll_counter=i)
-            dice_results = [dice_results[i] for i in range(DIE_COUNT) if keep_mask[i]] + self.roll_n_dice(DIE_COUNT - sum(keep_mask))
-            self.logger.log(f'keep {i + 1}: {keep_mask} (reason: {keep_reason})', category='success')
-            self.logger.log(f'roll {i + 2}: {[x.value for x in dice_results]}', category='warning')
+        for i in range(MAX_ROLLS):
+            dice_results = [die for d, die in enumerate(dice_results) if keep_mask[d]] + self.roll_n_dice(DIE_COUNT - sum(keep_mask))
+            self.logger.log(f'roll {i + 1}: {[x.value for x in dice_results]}', category='warning')
+            if i < MAX_ROLLS - 1:
+                keep_mask, keep_reason = self.current_player.keep_dice(copy.deepcopy(dice_results), {player.name: (player.idx, player.state) for player in self.other_players}, roll_counter=i)
+                self.logger.log(f'keep {i + 1}: {keep_mask} (reason: {keep_reason})', category='success')
 
         return dice_results
 
@@ -131,6 +131,9 @@ class Game:
         else:
             self.logger.log('No winner yet.', category='warning')
 
+    def next_player(self):
+        self.current_player_idx = (self.current_player_idx + 1) % self.n_players
+
     def step(self):
         if self.active_players[self.current_player_idx]:
             self.logger.log(f'\n\nturn {self.turns}: {self.current_player}\'s turn ({self.current_player.state})', category='error')
@@ -140,7 +143,7 @@ class Game:
             self.enter_tokyo()
             self.check_winner()
             self.turns += 1
-        self.current_player_idx = (self.current_player_idx + 1) % self.n_players
+        self.next_player()
 
 
 if __name__ == '__main__':
