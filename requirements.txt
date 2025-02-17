@@ -2,3 +2,6 @@ pydantic
 jupyterlab
 tqdm
 litellm
+torch
+torchvision
+torchaudio
